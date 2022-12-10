@@ -11,11 +11,29 @@ import matplotlib.pyplot as plt
 
 
 def data_extractor(url, columns_to_delete, rows_to_skip, indicator):
-    
     '''
     
+
+    Parameters
+    ----------
+    url : string
+        string of url or filepath to the source data.
+    columns_to_delete : list of strings
+        List of all the columns to be deleted from the source data.
+    rows_to_skip : int
+        int of a number of rows to skip.
+    indicator : string
+        name of the indicator to be used to extract data from the source data.
+
+    Returns
+    -------
+    df1 : pandas dataframe
+        dataframe containig the original dataset.
+    df2 : TYPE
+        dataframe containing a transpose of the original dataset.
+
     '''
-  
+    
     df = pd.read_csv(url, skiprows=rows_to_skip)
     df = df.loc[df['Indicator Name'] == indicator]
   
