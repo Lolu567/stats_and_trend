@@ -57,6 +57,24 @@ def data_extractor(url, columns_to_delete, rows_to_skip, indicator):
 
 
 def create_df_by_country(country, url, indicator):
+    '''
+    
+
+    Parameters
+    ----------
+    country : string
+        list coutnries to be used to extract data for plotting.
+    url : string
+        string of url or filepath to the source data.
+    indicator : string
+        name of the indicator to be used to extract data from the source data.
+
+    Returns
+    -------
+    df : pandas dataframe
+        dataframe of the countries to be considered
+
+    '''
   
     #generate the original data from file/url
     df1, df2 = data_extractor(url, columns_to_delete, rows_to_skip, indicator)
@@ -73,6 +91,24 @@ def create_df_by_country(country, url, indicator):
     return df
 
 def create_df_by_year(year, url, indicator):
+    '''
+    
+
+    Parameters
+    ----------
+    year : string
+        list uears to be used to extract data for plotting.
+    url : string
+        string of url or filepath to the source data.
+    indicator : string
+        name of the indicator to be used to extract data from the source data.
+
+    Returns
+    -------
+    df : pandas dataframe
+        dataframe of the countries to be considered
+        
+    '''
   
     #generate the original data from file/url
     df1, df2 = data_extractor(url, columns_to_delete, rows_to_skip, indicator)
@@ -84,6 +120,49 @@ def create_df_by_year(year, url, indicator):
     
     df = df[['Year'] + country]
     return df
+
+def sum_country_data(dataframe):
+    '''
+    
+
+    Parameters
+    ----------
+    dataframe : pandas dataframe
+        The dataframe to be summed
+
+    Returns
+    -------
+    dataframe : pandas dataframe
+        dataframe with the summed data.
+
+    '''
+    
+    
+    dataframe['sum'] = dataframe.iloc[:, 1:].sum(axis=1)
+    return dataframe
+
+def plot_pie(sum_population):
+    '''
+    
+
+    Parameters
+    ----------
+    sum_population : pandas dataframe
+        The dataframe to be summed
+
+    Returns
+    -------
+    dataframe : pandas dataframe
+        dataframe with the summed data.
+
+    '''
+    plt.pie(sum_population['sum'], labels=sum_population['Country Name'], autopct='%1.3f%%', shadow=True, startangle=90)
+    plt.title('Population fo select countries compared')
+    plt.show()
+
+
+#-------------------------initialization of variables-------------------------
+
 
 
 country = ['New Zealand', 'China', 'Nigeria', 'Angola']
@@ -125,6 +204,10 @@ title = ['population', 'Urban Migration', 'Arable Land',
           'population', 'Urban Migration', 'Arable Land',
           'population', 'Urban Migration', 'Arable Land']
 
+
+#---------------------ploting of line charts-----------------------------
+
+
 plt.figure(figsize=(20, 30))
 
 for i in range(len(y_data)):
@@ -139,18 +222,8 @@ for i in range(len(y_data)):
 plt.title('Date Rate comparison across 4 countries in 2020')
 plt.show()
 
-def sum_country_data(dataframe):
-    dataframe['sum'] = dataframe.iloc[:, 1:].sum(axis=1)
-    return dataframe
-
 
 data = sum_country_data(df_pop_country)
-
-def plot_pie(sum_population):
-    plt.pie(sum_population['sum'], labels=sum_population['Country Name'], autopct='%1.3f%%', shadow=True, startangle=90)
-    plt.title('Population fo select countries compared')
-    plt.show()
-
 
 plot_pie(data)
 
