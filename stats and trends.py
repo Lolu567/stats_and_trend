@@ -7,6 +7,7 @@ Created on Sat Dec 10 19:14:09 2022
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 
 
@@ -157,7 +158,7 @@ def plot_pie(sum_population):
 
     '''
     plt.pie(sum_population['sum'], labels=sum_population['Country Name'], autopct='%1.3f%%', shadow=True, startangle=90)
-    plt.title('Population fo select countries compared')
+    plt.title('Population to select countries compared')
     plt.show()
 
 
@@ -178,6 +179,10 @@ df_urban_country = create_df_by_country(country, url, 'Urban population')
 df_urban_year = create_df_by_year(year, url, 'Urban population')
 df_arable_country = create_df_by_country(country, url, 'Arable land (% of land area)')
 df_arable_year = create_df_by_year(year, url, 'Population growth (annual %)')
+print(df_pop_country)
+print()
+print(df_pop_year)
+print()
 
 
 x_data = df_pop_year['Year']
@@ -199,10 +204,10 @@ colors = ['blue', 'red', 'green',
           'blue', 'red', 'green',
           'blue', 'red', 'green']
 
-title = ['population', 'Urban Migration', 'Arable Land',
-          'population', 'Urban Migration', 'Arable Land',
-          'population', 'Urban Migration', 'Arable Land',
-          'population', 'Urban Migration', 'Arable Land']
+title = ['population', 'Urban Popluation', 'Arable Land',
+          'population', 'Urban Population', 'Arable Land',
+          'population', 'Urban Population', 'Arable Land',
+          'population', 'Urban Population', 'Arable Land']
 
 
 #---------------------ploting of line charts-----------------------------
@@ -219,7 +224,6 @@ for i in range(len(y_data)):
     plt.title(legend[i])
     plt.legend()
 
-plt.title('Date Rate comparison across 4 countries in 2020')
 plt.show()
 
 
@@ -229,8 +233,41 @@ plot_pie(data)
 
 plt.figure()
 df_pop_country.plot('Country Name', ['2019', '2020', '2021'], kind='bar')
+plt.title('Population trend by year')
 plt.show()
 
 plt.figure()
 df_urban_year.plot('Year', ['New Zealand', 'China', 'Nigeria', 'Angola'], kind='bar')
+plt.title('Urban trend by country')
 plt.show()
+
+
+
+# correlation
+
+df= {'Population': df_pop_year['New Zealand'],  
+     'Arable': df_arable_year['New Zealand'], 'Urban': df_urban_year['New Zealand']}
+df = pd.DataFrame(data=df)
+df = df.apply(pd.to_numeric, errors='coerce')
+print(df.corr())
+
+
+plt.figure()
+
+heatmap = sns.heatmap(df.corr(), annot=True,cmap='coolwarm')
+
+heatmap.set_title('China Correlation Heatmap', fontdict={'fontsize':12}, pad=12)
+
+plt.savefig('correlation heatmap')
+
+
+
+
+df= {'Population': df_pop_year['China'],  
+     'Arable': df_arable_year['China'], 'Urban': df_urban_year['China']}
+df = pd.DataFrame(data=df)
+df = df.apply(pd.to_numeric, errors='coerce')
+print(df.cov())
+
+
+df_urban_year.describe()
