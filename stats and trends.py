@@ -10,7 +10,6 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 
-
 def data_extractor(url, columns_to_delete, rows_to_skip, indicator):
     '''
     
@@ -30,7 +29,7 @@ def data_extractor(url, columns_to_delete, rows_to_skip, indicator):
     -------
     df1 : pandas dataframe
         dataframe containig the original dataset.
-    df2 : TYPE
+    df2 : pandas dataframe
         dataframe containing a transpose of the original dataset.
 
     '''
@@ -91,6 +90,7 @@ def create_df_by_country(country, url, indicator):
     df = df[['Country Name'] + year]
     return df
 
+
 def create_df_by_year(year, url, indicator):
     '''
     
@@ -122,6 +122,7 @@ def create_df_by_year(year, url, indicator):
     df = df[['Year'] + country]
     return df
 
+
 def sum_country_data(dataframe):
     '''
     
@@ -141,6 +142,7 @@ def sum_country_data(dataframe):
     
     dataframe['sum'] = dataframe.iloc[:, 1:].sum(axis=1)
     return dataframe
+
 
 def plot_pie(sum_population):
     '''
@@ -194,20 +196,26 @@ y_data = [df_pop_year['New Zealand'], df_urban_year['New Zealand'], df_arable_ye
           df_pop_year['Angola'], df_urban_year['Angola'], df_arable_year['Angola']
          ]
 
-legend = ['New Zealand Population', 'New Zealand Urban Migration', 'New Zealand Arable Land',
-        'China Population', 'China Urban Migration', 'China Arable Land',
-        'Nigeria Population', 'Nigeria Urban Migration', 'Nigeria Arable Land',
-        'Angola Population', 'Angola Urban Migration', 'Angola Arable Land']
+legend = ['New Zealand Population growth (%)', 'New Zealand Urban Migration', 'New Zealand Arable Land',
+        'China Population growth (%)', 'China Urban Migration', 'China Arable Land',
+        'Nigeria Population growth (%)', 'Nigeria Urban Migration', 'Nigeria Arable Land',
+        'Angola Population growth (%)', 'Angola Urban Migration', 'Angola Arable Land']
 
 colors = ['blue', 'red', 'green',
           'blue', 'red', 'green',
           'blue', 'red', 'green',
           'blue', 'red', 'green']
 
-title = ['population', 'Urban Popluation', 'Arable Land',
-          'population', 'Urban Population', 'Arable Land',
-          'population', 'Urban Population', 'Arable Land',
-          'population', 'Urban Population', 'Arable Land']
+title = ['population', 'Urban Migration', 'Arable Land',
+          'population', 'Urban Migration', 'Arable Land',
+          'population', 'Urban Migration', 'Arable Land',
+          'population', 'Urban Migration', 'Arable Land']
+
+ylabel = ['% population growth', '% Urban Migration', '% arable land',
+         '% population growth', '% Urban Migration', '% arable land',
+         '% population growth', '% Urban Migration', '% arable land',
+         '% population growth', '% Urban Migration', '% arable land']
+
 
 
 #---------------------ploting of line charts-----------------------------
@@ -217,11 +225,14 @@ plt.figure(figsize=(20, 30))
 
 for i in range(len(y_data)):
     plt.subplot(4, 3, i+1)
+    plt.subplots_adjust(hspace=0.35)
     plt.plot(x_data, y_data[i], label=title[i], color=colors[i])
     plt.xticks(rotation='vertical')
-    plt.xlabel('Year')
-    plt.xlabel('Count')
-    plt.title(legend[i])
+    plt.ylabel(ylabel[i], fontsize=18)
+    plt.xlabel('Year', fontsize=18)
+    plt.title(legend[i], fontsize=18)
+    plt.tick_params(axis='both', labelsize=18)
+    plt.savefig('subplot.png')
     plt.legend()
 
 plt.show()
@@ -270,4 +281,5 @@ df = df.apply(pd.to_numeric, errors='coerce')
 print(df.cov())
 
 
-df_urban_year.describe()
+desc = df_urban_country.describe()
+print(desc)
